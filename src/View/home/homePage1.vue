@@ -51,11 +51,12 @@ import HomeItem from "@/View/home/homeItem.vue";
               </router-link>
             </div>
             <div class="home-page-1-left-bar-item">
-              <router-link to="/home/page5">
+              <router-link to="/home/monitorPage">
                 <i class="el-icon-menu"></i>
-                <span>系统设置</span>
+                <span>监控模块</span>
               </router-link>
             </div>
+
       </div>
 
       <div class="home-page-1-main-content">

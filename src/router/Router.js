@@ -47,6 +47,12 @@ const routes = [
                      RegisterRoute('list-p', 'listGroup', () => import('../View/group/listgroup/listGroup.vue')),
                  ]
              ),
+             RegisterChildRoutes('monitorPage', 'monitorPage', () => import('../View/monitor/monitorPage.vue'),
+                 [
+                     RegisterRoute('cat-monitorPage', 'cat-monitorPage', () => import('../View/monitor/cat-monitor/catMonitorPage.vue')),
+                     RegisterRoute('cat-log', 'cat-log', () => import('../View/monitor/cat-log/catLog.vue')),
+                     RegisterRoute('log-list', 'log-list', () => import('../View/monitor/log-list/logList.vue')),
+                 ]),
              RegisterRoute('/user/PersonalCenter', 'PersonalCenter', () => import('../View/user/PersonalCenter.vue')),
          ]),
      {
