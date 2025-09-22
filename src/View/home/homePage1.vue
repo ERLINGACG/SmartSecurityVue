@@ -27,23 +27,24 @@ import HomeItem from "@/View/home/homeItem.vue";
 
       <div class="home-page-1-left-bar">
             <div class="home-page-1-left-bar-item">
-              <router-link to="/home/homeItem">
+              <router-link to="/home/FirstPage">
                 <i class="el-icon-menu"></i>
                 <span>首页</span>
               </router-link>
             </div>
+          <div class="home-page-1-left-bar-item">
+            <router-link to="/home/page3">
+              <i class="el-icon-menu"></i>
+              <span>模块导航</span>
+            </router-link>
+          </div>
             <div class="home-page-1-left-bar-item">
               <router-link to="/home/devicePage/add">
                 <i class="el-icon-menu"></i>
                 <span>设备管理</span>
               </router-link>
             </div>
-            <div class="home-page-1-left-bar-item">
-              <router-link to="/home/page3">
-                <i class="el-icon-menu"></i>
-                <span>模块导航</span>
-              </router-link>
-            </div>
+
             <div class="home-page-1-left-bar-item">
               <router-link to="/home/groupPage/create">
                 <i class="el-icon-menu"></i>

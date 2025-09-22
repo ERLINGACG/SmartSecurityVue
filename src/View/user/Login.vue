@@ -19,7 +19,7 @@ export default {
      if (result===2000) {
         console.log('登录成功');
         localStorage.setItem("nowUser", this.userModel.UserLogin.email);
-        this.$router.push("/home/homeItem");
+        this.$router.push("/home/FirstPage");
      }
     }
   }

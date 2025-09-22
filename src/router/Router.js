@@ -27,6 +27,7 @@ const routes = [
 
         () => import('../View/home/homePage1.vue'),[
              RegisterRoute('homeItem', 'homeItem', () => import('../View/home/homeItem.vue')),
+             RegisterRoute('FirstPage', 'FirstPage', () => import('../View/home/fristPage1.vue')),
              // RegisterRoute('devicePage', 'homeItem2', () => import('../View/device/devicePage.vue')),
              RegisterChildRoutes(
                  'devicePage',
@@ -52,6 +53,8 @@ const routes = [
                      RegisterRoute('cat-monitorPage', 'cat-monitorPage', () => import('../View/monitor/cat-monitor/catMonitorPage.vue')),
                      RegisterRoute('cat-log', 'cat-log', () => import('../View/monitor/cat-log/catLog.vue')),
                      RegisterRoute('log-list', 'log-list', () => import('../View/monitor/log-list/logList.vue')),
+                     RegisterRoute('cat-report', 'cat-report', () => import('../View/monitor/generate-report/reportPage.vue')),
+                     RegisterRoute('cat-message', 'cat-message', () => import('../View/monitor/message/cat-message.vue')),
                  ]),
              RegisterRoute('/user/PersonalCenter', 'PersonalCenter', () => import('../View/user/PersonalCenter.vue')),
          ]),

@@ -1,6 +1,9 @@
 <script setup>
 
-import TitleBox from "@/View/monitor/title-box.vue";
+
+
+
+
 </script>
 
 <template>
@@ -13,14 +16,17 @@ import TitleBox from "@/View/monitor/title-box.vue";
          <router-link to="/home/monitorPage/cat-monitorPage" class="bar-item">
            查看监控
          </router-link>
-         <router-link to="/home/monitorPage/generate-report" class="bar-item">
+         <router-link to="/home/monitorPage/cat-message" class="bar-item">
+           查看实时消息
+         </router-link>
+         <router-link to="/home/monitorPage/cat-report" class="bar-item">
            生成报告
          </router-link>
          <router-link to="/home/monitorPage/cat-log" class="bar-item">
            查看日志
          </router-link>
          <router-link to="/home/monitorPage/log-list" class="bar-item" >
-           日志列表
+           关键帧列表
          </router-link>
        </div>
        <div class="monitor-page-header-line"></div>
@@ -35,10 +41,10 @@ import TitleBox from "@/View/monitor/title-box.vue";
 .monitor-container {
   position: relative;
   margin-left: 200px;
-  margin-top: 20px;
+  margin-top: 300px;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 800px;
   width: 100%;
 
 }
@@ -89,7 +95,7 @@ import TitleBox from "@/View/monitor/title-box.vue";
 .monitor-page-body {
   display: flex;
   justify-content: flex-start;
-  height: 60vh;
+  height: auto;
   width: 60vw;
   border-radius: 8px;
   border: 1px solid rgba(204, 204, 204);
