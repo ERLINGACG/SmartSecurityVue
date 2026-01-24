@@ -26,6 +26,35 @@ const prevPage = () => {
     currentPage.value--;
   }
 };
+const searchText = ref(''); // 搜索关键词
+const searchType = ref('all'); // 搜索类型：all、1（设备名称）、2（设备类型）、3（设备topic）
+const originalDevices = ref([]); // 原始设备列表（用于恢复）
+const selectPage = async () => {
+  console.log('值:', searchType.value, '类型:', typeof searchType.value); // 新增这行
+  switch (Number(searchType.value)) {
+    case 1:
+      console.log('设备名称');
+      DeviceModel.DeviceList.value = DeviceModel.DeviceList.value.filter(item => item.deviceName.includes(searchText.value));
+      // console.log(DeviceModel.DeviceList.value)
+      break;
+    case 2:
+      console.log('设备类型');
+      DeviceModel.DeviceList.value = DeviceModel.DeviceList.value.filter(item => item.deviceType.includes(searchText.value));
+      // console.log(DeviceModel.DeviceList.value)
+      break;
+    case 3:
+      console.log('设备topic');
+      DeviceModel.DeviceList.value = DeviceModel.DeviceList.value.filter(item => item.deviceTopic.includes(searchText.value));
+      break;
+    default:
+      console.log('all');
+      break;
+  }
+}
+const async= async () => {
+  DeviceModel.DeviceList.value = await DeviceService.GetDeviceList(localStorage.getItem("nowUser"))
+}
+
 onMounted(async () => {
   DeviceModel.DeviceList.value = await DeviceService.GetDeviceList(localStorage.getItem("nowUser"))
   console.log(DeviceModel.DeviceList.value)
@@ -37,14 +66,17 @@ onMounted(async () => {
     <div class="list-device-header">
        <h3>设备列表</h3>
        <div class="list-device-header-search">
-          <input type="text" placeholder="按设备名称搜索">
-          <button class="search-btn">搜索</button>
-          <select>
+          <input type="text" placeholder="搜索" v-model="searchText">
+          <button class="search-btn" @click="selectPage">搜索</button>
+          <select v-model="searchType">
              <option value="all">搜索设置</option>
+               <option value="1">设备名称</option>
+               <option value="2">设备类型</option>
+               <option value="3">设备topic</option>
           </select>
-         <select>
-             <option>设备筛选</option>
-         </select>
+<!--         <select>-->
+<!--             <option>设备筛选</option>-->
+<!--         </select>-->
 
        </div>
        <div class="list-device-header-line"></div>
@@ -82,8 +114,9 @@ onMounted(async () => {
         </button>
 
         <span class="page-info">
-      第 {{ currentPage }} 页 / 共 {{ totalPages }} 页
-    </span>
+          第 <input type="number" v-model="currentPage" min="1" max="totalPages" style="width: 40px; margin-right: 5px;">
+          页 / 共 {{ totalPages }} 页
+        </span>
 
         <button
             @click="nextPage"
@@ -92,7 +125,7 @@ onMounted(async () => {
         >
           下一页
         </button>
-        <button class="">刷新</button>
+        <button  @click="async">刷新</button>
       </div>
 
     </div>

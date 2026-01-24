@@ -2,6 +2,8 @@
 import {computed, onMounted, reactive, ref} from "vue";
 import detectHistoryService from "@/ViewModel/detectHistory/detectHistroyService.js";
 import DetectHistoryModel from "@/Model/detectHistory/detectHistoryModel.js";
+import DeviceModel from "@/Model/device/deviceModel.js";
+import DeviceService from "@/ViewModel/device/deviceService.js";
 // const data=reactive({})
 
 const totalPages = computed(() => {
@@ -26,10 +28,21 @@ const prevPage = () => {
     currentPage.value--;
   }
 };
+const searchKey = ref(""); // 搜索关键字
+
+const setSearchKey = () => {
+  console.log(searchKey.value)
+  localStorage.setItem("searchKey", searchKey.value);
+  window.location.reload();
+};
 
 
 onMounted(async () => {
-  DetectHistoryModel.getALLDataList.value = await detectHistoryService.getHistory("/topic/image2")
+  if(!localStorage.getItem("searchKey")){
+    localStorage.setItem("searchKey","");
+  }
+  DetectHistoryModel.getALLDataList.value = await detectHistoryService.getHistory(localStorage.getItem("searchKey"))
+  DeviceModel.DeviceList.value = await DeviceService.GetDeviceList(localStorage.getItem("nowUser"));
 })
 </script>
 
@@ -40,11 +53,9 @@ onMounted(async () => {
           <h3>关键帧列表</h3>
         </div>
         <div class="log-list-header-search">
-          <input type="text" placeholder="搜索">
-          <button class="search-btn">搜索</button>
-          <select>
-            <option value="1">按日期筛选</option>
-
+          <button class="search-btn" @click="setSearchKey">筛选</button>
+          <select v-model="searchKey">
+            <option  v-for="item in DeviceModel.DeviceList.value" :key="item.deviceTopic">{{item.deviceTopic}}</option>
           </select>
         </div>
 
@@ -72,7 +83,8 @@ onMounted(async () => {
         </div>
       <div class="body-bottom">
         <button @click="prevPage">上一页</button>
-        第 {{ currentPage }} 页 / 共 {{ totalPages }} 页
+
+        第  <input v-model="currentPage" style="width: 50px;margin-left: 5px;"/> 页 / 共 {{ totalPages }} 页
         <button @click="nextPage">下一页</button>
       </div>
     </div>
@@ -80,6 +92,25 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+input {
+  padding: 8px 12px;
+  margin-right: 6px;
+  border: 1px solid #304156;
+  border-radius: 4px;
+  height: 28px;
+  background: #2d3a4b;
+  color: #fff;
+  transition: all 0.3s;
+
+  &:hover {
+    border-color: #409eff;
+  }
+
+  &:focus {
+    border-color: #1890ff;
+    box-shadow: 0 0 8px rgba(24, 144, 255, 0.2);
+  }
+}
 .log-list-header-container {
   width: 100%;
   height: 100%;
@@ -101,25 +132,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: row;
 
-  input {
-    padding: 8px 12px;
-    margin-right: 6px;
-    border: 1px solid #304156;
-    border-radius: 4px;
-    height: 28px;
-    background: #2d3a4b;
-    color: #fff;
-    transition: all 0.3s;
 
-    &:hover {
-      border-color: #409eff;
-    }
-
-    &:focus {
-      border-color: #1890ff;
-      box-shadow: 0 0 8px rgba(24, 144, 255, 0.2);
-    }
-  }
   select {
     margin-left: 5px;
     padding: 0 12px;

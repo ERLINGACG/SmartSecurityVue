@@ -25,20 +25,23 @@ const Test=()=>{
    console.log(parseDateTime(endTime.value)-subTime.value);
    console.log(selectTopic.value)
 }
-const getSSELog = async () => {
+const getSSELog = () => {
   // 每次请求前清空内容
-  streamContent.value = "";
-
   // 构建查询参数
+  console.log("开始请求")
   const params = new URLSearchParams();
   params.append('topic', selectTopic.value);
   params.append('start', parseDateTime(endTime.value)-subTime.value);
   params.append('end', parseDateTime(endTime.value));
 
   // 拼接完整URL
-  const url = `http://localhost:8080/ai/deepseek/ai/chat/historyTest2?${params.toString()}`;
+  const url = `http://localhost:8080/ai/deepseek/chat/generateReport?${params.toString()}`;
 
-  const eventSource = new EventSource(url);
+  const eventSource = new EventSource(url,{
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
+    }
+  });
 
   eventSource.onmessage = (event) => {
     console.log(event.data);
@@ -68,6 +71,13 @@ const getSSELog = async () => {
     console.log('EventSource connection closed');
   };
 };
+
+
+const  getESSlog2= () => {
+  for (let i = 0; i < 3; i++) {
+    getSSELog()
+  }
+}
 </script>
 
 <template>

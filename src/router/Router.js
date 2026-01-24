@@ -55,8 +55,9 @@ const routes = [
                      RegisterRoute('log-list', 'log-list', () => import('../View/monitor/log-list/logList.vue')),
                      RegisterRoute('cat-report', 'cat-report', () => import('../View/monitor/generate-report/reportPage.vue')),
                      RegisterRoute('cat-message', 'cat-message', () => import('../View/monitor/message/cat-message.vue')),
+                     RegisterRoute('set-follows',  'set-follows', () => import('../View/monitor/follow/set-follows.vue')),
                  ]),
-             RegisterRoute('/user/PersonalCenter', 'PersonalCenter', () => import('../View/user/PersonalCenter.vue')),
+             RegisterRoute('/user/PersonalCenter', 'PersonalCenter', () => import('../View/user/per/PersonalCenter.vue')),
          ]),
      {
         path: '/',
@@ -68,4 +69,44 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes
 });
+
+
+
+// 添加全局后置钩子
+router.afterEach((to, from) => {
+    console.log('路由跳转记录:', {
+        from: from.fullPath,
+        to: to.fullPath,
+        time: new Date().toISOString(),
+
+    });
+    const history = JSON.parse(localStorage.getItem('routeHistory') || '[]');
+    // 添加新记录到数组开头（最近访问在前）
+    history.unshift({
+        path: to.fullPath,
+        timestamp: new Date().getTime()
+    });
+    // 限制最大保存数量（示例保留最近10条）
+    const MAX_HISTORY = 5;
+    const trimmedHistory = history.slice(0, MAX_HISTORY);
+    let flag= false;
+    for(const it of JSON.parse(localStorage.getItem('routeHistory'))){
+       console.log(it);
+       if(it.path !== to.fullPath){
+           flag = true;
+       }
+    }
+    console.log(flag);
+    if(to.fullPath !== '/user/login' &&
+        to.fullPath !== '/user/register' &&
+        to.fullPath !== '/home/FirstPage' && flag){
+        flag = false;
+        localStorage.setItem('routeHistory', JSON.stringify(trimmedHistory));
+
+    }
+    // 存储更新后的数组
+
+    // 这里可以替换为实际记录逻辑，如发送到服务器
+});
+
 export default router;

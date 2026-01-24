@@ -50,6 +50,9 @@ const uploadAvatar = async () => {
 onMounted(async () => {
   await groupService.getGroupList()
 })
+const test = () => {
+  console.log(memberModel.updateCheck)
+}
 </script>
 
 <template>
@@ -88,10 +91,17 @@ onMounted(async () => {
         <div class="member-info-item">
           <h4>成员身份</h4>
           <input type="text" placeholder="请输入身份" v-model="memberModel.addMemberModel.memberIdentity">
+          <h4>成员ID</h4>
+          <input type="text" placeholder="请输入ID(可选，更新已有成员时必填)"
+                 style="width: 100px;margin-left: 25px;"
+                 v-model="memberModel.addMemberModel.mid"
+          >
+
         </div>
         <div class="member-info-item">
           <button @click="$refs.fileInput.click()">上传照片</button>
           <button @click="uploadAvatar">重新上传</button>
+          <button @click="test()">测试</button>
         </div>
       </div>
     </div>

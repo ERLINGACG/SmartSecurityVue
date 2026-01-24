@@ -1,5 +1,7 @@
 import axios from "axios";
 import GroupModel from "@/Model/group/groupModel.js";
+import router from "@/router/Router.js";
+import request from "@/ViewModel/utils/httpUtils.js";
 
 
 // static newGroup={
@@ -17,13 +19,10 @@ class GroupService {
        update:'http://localhost:8080/group/update',
        delete:'http://localhost:8080/group/delete'
    }
-   testCatModel(group){
-       console.log(group)
-   }
+
    async addGroup(group){
-       try{
            const url=this.groupLis.add
-           const response= await axios.post(url,{
+           const response= await request.post(url,{
                groupName:group.groupName,
                groupEmail:group.groupEmail,
                groupTopic:group.groupTopic,
@@ -32,24 +31,13 @@ class GroupService {
            })
            console.log(response.data)
            alert(response.data.message)
-       }catch (error) {
-           if (error.response) {
-               console.error('请求失败:', error.response.status);
-               alert(error.response.data.message || `操作失败: ${error.response.status}`);
-           } else {
-               // 网络错误或无响应
-               console.error('请求错误:', error.message);
-               alert('网络错误，请检查连接');
-           }
-           console.log(error)
-       }
-
    }
    async getGroup(name){
+       const   token=`Bearer ${localStorage.getItem('jwt_token')}`
        const url=this.groupLis.get
        console.log(name)
        const headers = {
-           'Authorization': '',
+           'Authorization': token,
            'Group-Email': localStorage.getItem('nowUser')
        };
 
@@ -64,14 +52,33 @@ class GroupService {
        return response.data.data
    }
    async getGroupList(){
-
+   try{
+       // console.log(this.token)
+       const token=`Bearer ${localStorage.getItem('jwt_token')}`
        const url=this.groupLis.getList
        const headers = {
-           'Authorization': '',
+           'Authorization': token,
            'Group-Email': localStorage.getItem('nowUser')
        };
        const response= await axios.get(url,{ headers:headers})
        GroupModel.groupList.value=response.data.data
+   }catch (error) {
+       if (error.response) {
+           // 服务器返回4xx/5xx状态码
+           console.error('请求失败:', error.response.status);
+           if(error.response.data.code === 401){
+               alert(error.response.data.message);
+               await router.push('/user/login')
+           }
+
+       } else {
+           // 网络错误或无响应
+           console.error('请求错误:', error.message);
+           alert('网络错误，请检查连接');
+       }
+
+   }
+
    }
    async updateGroup(group){
        try{
@@ -88,7 +95,7 @@ class GroupService {
                groupDescription:group.groupDescription,
                groupVisibility:group.groupVisibility
 
-       })
+       },{headers:headers})
        alert(response.data.message)
        }catch (error) {
            if (error.response) {
@@ -106,11 +113,12 @@ class GroupService {
 
    async deleteGroup(gid){
        try{
+           const token=`Bearer ${localStorage.getItem('jwt_token')}`
            const isConfirmed = confirm(`删除群组${gid},会删除群组内所有成员，请确认是否删除`);
            if (!isConfirmed) return; // 用户取消则中止操作
            const url=this.groupLis.delete+`/${gid}`
            const headers = {
-               'Authorization': '',
+               'Authorization': token,
                'Group-Email': localStorage.getItem('nowUser')
            };
            const response= await axios.delete(url,{

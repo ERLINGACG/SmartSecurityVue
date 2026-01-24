@@ -15,8 +15,7 @@ const selectInfo=''
 const selectGroup = (title)=>{
   GroupModel.updateGroupList.value = Object.assign({},
       GroupModel.groupList.value.find(item=>item.groupName===title))
-
-  console.log("selectGroup",title)
+  console.log("selectGroup",GroupModel.groupList.value)
 }
 const pid = ref(0)
 const sureSelect = async () => {

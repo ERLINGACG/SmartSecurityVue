@@ -2,7 +2,10 @@
 
 import memberModel from "@/Model/group/memberModel.js";
 import memberService from "@/ViewModel/group/memberService.js";
-</script>
+import {ref} from "vue";
+
+  // const updateCheck = ref(false);
+  </script>
 
 
 
@@ -13,10 +16,12 @@ import memberService from "@/ViewModel/group/memberService.js";
    <div class="ul-box2-btn">
      <input type="checkbox" >
      <p >我已阅读并同意隐私</p>
+     <input type="checkbox" style="margin-left: 10px;" v-model="memberModel.updateCheck">
+     <p>更新已有成员选项</p>
    </div>
    <div class="ul-box2-btn">
      <button @click="memberService.addMember(memberModel.addMemberModel,memberModel.addFeatureModel)">上传</button>
-     <button>更新已有成员</button>
+     <button @click="memberService.updateMember(memberModel.addMemberModel,memberModel.addFeatureModel)">更新已有成员</button>
    </div>
 </div>
 </template>

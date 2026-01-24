@@ -49,7 +49,7 @@ const test = async () => {
               {{truncateText(item.deviceName, 10)+ " : " + truncateText(item.pid, 10)}}
           </option>
       </select>
-      <button @click="test">测试</button>
+      <button @click="test" style="margin-left: 10px; height: 30px;">一键更新</button>
     </div>
 
     <div class="u-box1-form" id="u-box1-form2">
@@ -169,6 +169,24 @@ const test = async () => {
 #u-box1-form1{
   select{
     width: 200px;
+  }
+}
+button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 32px;
+  background: #1890ff;
+  color: white;
+  border: none;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background: #40a9ff;
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
   }
 }
 </style>

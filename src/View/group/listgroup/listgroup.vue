@@ -64,6 +64,7 @@ onMounted(async ()=>{
       </div>
       <div class="list-group-btn-box">
         <button
+            style="margin-right: 10px;"
             @click="prevPage"
             :disabled="currentPage === 1"
             class="page-btn"
@@ -71,9 +72,10 @@ onMounted(async ()=>{
           上一页
         </button>
         <span class="page-info">
-      第 {{ currentPage }} 页 / 共 {{ totalPages }} 页
-    </span>
+         第 <input type="number" v-model="currentPage" min="1" max="{{ totalPages }}" class="page-input" style="width: 40px; height: 20px; margin-right: 5px;">页 / 共 {{ totalPages }} 页
+        </span>
         <button
+            style="margin-left: 10px;"
             @click="nextPage"
             :disabled="currentPage === totalPages"
             class="page-btn"
@@ -181,6 +183,32 @@ onMounted(async ()=>{
       width: 90%;
       background-color: #EFEFEF;
     }
+  }
+}
+.list-group-btn-box{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+
+}
+button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 32px;
+  background: #1890ff;
+  color: white;
+  border: none;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background: #40a9ff;
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
   }
 }
 </style>

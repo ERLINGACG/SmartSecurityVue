@@ -1,46 +1,82 @@
 <script setup>
 import {nextTick, onMounted, ref} from "vue";
 import videoService from "@/ViewModel/ws-video/VideoService.js";
+import DeviceModel from "@/Model/device/deviceModel.js";
+import DeviceService from "@/ViewModel/device/deviceService.js";
+import messageService from "@/ViewModel/ws-video/messageService.js";
 
 const messages = ref([]);
 const contentContainer = ref(null);
 const hasPerson = ref(false); // 新增响应式状态
+
+onMounted(async () => {
+  DeviceModel.DeviceList.value = await DeviceService.GetDeviceList(localStorage.getItem("nowUser"))
+  // console.log(DeviceModel.DeviceList.value)
+})
+
 onMounted(() => {
-  videoService.getMessage({
-    onMessage: (newMessages) => {
-      messages.value = newMessages;
-      const lastMessage = newMessages[newMessages.length - 1];
-      console.log("message", newMessages);
 
-      const jsonMatch = lastMessage.match(/\{.*\}/);
+  // videoService.getMessage({
+  //   onMessage: (newMessages) => {
+  //     messages.value = newMessages;
+  //     const lastMessage = newMessages[newMessages.length - 1];
+  //     // 关键修复：判断新消息数组是否有内容
+  //     if (newMessages && newMessages.length > 0) {
+  //       hasPerson.value = true;
+  //       // 清除上一次的定时器，避免多次消息导致状态提前关闭
+  //       clearTimeout(window.emergencyTimer);
+  //       window.emergencyTimer = setTimeout(() => {
+  //         hasPerson.value = false;
+  //       }, 10000); // 10秒后恢复
+  //     }
+  //
+  //     // 自动滚动到底部
+  //     nextTick(() => {
+  //       if (contentContainer.value) {
+  //         contentContainer.value.scrollTop = contentContainer.value.scrollHeight;
+  //       }
+  //     })
+  //   }
+  //
+  // });
+   videoService.getMessageList(({
+     onMessage: (newMessages,topic) => {
+       messages.value = newMessages;
+       console.log('收到最新消息列表：', messages);
+       console.log(topic);
 
-      if (jsonMatch) {
-        try {
-          const data = JSON.parse(jsonMatch[0]);
-          const hasPersonDetected = Object.values(data).some(
-              items => items.some(item => item.person > 0)
-          );
+           const lastMessage = newMessages[newMessages.length - 1];
 
-          if (hasPersonDetected) {
-            hasPerson.value = true;
-            setTimeout(() => {
-              hasPerson.value = false;
-            }, 10000); // 10秒后恢复
-          }
-        } catch (e) {
-          console.error('JSON解析失败:', e);
-        }
-      }
-      // 自动滚动到底部
-      nextTick(() => {
-        if (contentContainer.value) {
-          contentContainer.value.scrollTop = contentContainer.value.scrollHeight;
-        }
-      })
-    }
+       // 1. 定义正则表达式
+         const hasUrgentReg = /urgent/; // 匹配包含urgent的topic（区分大小写）
+         // 若需不区分大小写，用 /urgent/i
+         // const hasUrgentReg = /urgent/i;
 
-  });
-});
+         const excludeTopicReg = /^\/topic\/image2\/message/; // 匹配/topic/image2/message开头的路径
+
+         // 2. 条件判断：有新消息 + 包含urgent + 不是排除的topic
+         const isNeedTrigger = newMessages && newMessages.length > 0
+                   && hasUrgentReg.test(topic)
+                   // 关键修复：判断新消息数组是否有内容
+           if (isNeedTrigger) {
+             hasPerson.value = true;
+             // 清除上一次的定时器，避免多次消息导致状态提前关闭
+             clearTimeout(window.emergencyTimer);
+             window.emergencyTimer = setTimeout(() => {
+               hasPerson.value = false;
+             }, 10000); // 10秒后恢复
+           }else {
+             hasPerson.value = false;
+           }
+           nextTick(() => {
+             if (contentContainer.value) {
+               contentContainer.value.scrollTop = contentContainer.value.scrollHeight;
+             }
+           })
+
+     }
+   }))
+})
 </script>
 
 <template>
@@ -51,7 +87,8 @@ onMounted(() => {
         </div>
         <div class="option-bar">
           <select>
-            <option value="1">全部</option>
+            <option value="1">设备列表</option>
+            <option v-for="item in DeviceModel.DeviceList.value" :value="item.deviceId">{{item.deviceName}}</option>
           </select>
           <button class="search-btn">查询</button>
         </div>

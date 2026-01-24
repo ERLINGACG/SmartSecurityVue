@@ -4,20 +4,16 @@ import DeviceModel from "@/Model/device/deviceModel.js";
 import DeviceService from "@/ViewModel/device/deviceService.js";
 
 
-const updateDevice = () => {
-    DeviceService.UpdateDevice(DeviceModel.updateModel.value)
+const updateDevice = async () => {
+  await DeviceService.UpdateDevice(DeviceModel.updateModel.value)
 };
-const test = () => {
-   DeviceService.test(
-      DeviceModel.updateModel.value,
-   )
-}
+
 </script>
 
 <template>
   <div class="u-box2">
     <h3>更改设备信息*</h3>
-    <textarea placeholder="更改设备描述（最多200字）" v-model="DeviceModel.updateModel.description"></textarea>
+    <textarea placeholder="更改设备描述（最多200字）" v-model="DeviceModel.updateModel.value.deviceDescribe"></textarea>
     <div class="submit-section">
       <button class="submit-btn" @click="updateDevice">更改设备信息</button>
 

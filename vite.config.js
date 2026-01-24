@@ -21,7 +21,8 @@ export default defineConfig({
     allowedHosts: [      // 添加允许访问的域名
       'frp-dad.com',     // 您需要放行的外部域名
       'localhost',        // 保留本地访问
-      'api.smartsecurity.local'
+      'api.smartsecurity.local',
+      'frp-gap.com'
     ]
   },
 

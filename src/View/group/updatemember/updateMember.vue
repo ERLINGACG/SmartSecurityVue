@@ -84,7 +84,7 @@ onMounted(async () => {
                     <input v-model="item.memberGender"/>
                     <input v-model="item.memberIdentity"/>
                     <input v-model="item.updateTime"/>
-                    <button @click="memberService.updateMember(item)">更新</button>
+                    <button @click="memberService.updateMemberNoFeatures(item)">更新</button>
                     <button @click="memberService.deleteMember(item)">删除</button>
                   </div>
              </div>

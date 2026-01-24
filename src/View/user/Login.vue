@@ -16,7 +16,7 @@ export default {
       console.log(userModel.UserLogin);
       const result = await UserService.Login(this.userModel);
       console.log(result);
-     if (result===2000) {
+     if (result===200) {
         console.log('登录成功');
         localStorage.setItem("nowUser", this.userModel.UserLogin.email);
         this.$router.push("/home/FirstPage");

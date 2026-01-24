@@ -28,6 +28,9 @@
          <router-link to="/home/monitorPage/log-list" class="bar-item" >
            关键帧列表
          </router-link>
+         <router-link to="/home/monitorPage/set-follows" class="bar-item">
+           设置关注列表
+         </router-link>
        </div>
        <div class="monitor-page-header-line"></div>
      </div>

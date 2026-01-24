@@ -19,9 +19,11 @@ class MemberModel {
        memberIdentity:'',
        memberGender:'',
        memberDescription:'',
-
+       mid:0,
     }
     static addFeatureModel=null;
+
+    static updateCheck=false;
 
     static memberList=ref([]);
 }
